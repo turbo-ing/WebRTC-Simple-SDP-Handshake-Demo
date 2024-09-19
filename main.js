@@ -41,13 +41,18 @@ let createAnswer = async () => {
         //Event that fires off when a new answer ICE candidate is created
         if(event.candidate){
             console.log('Adding answer candidate...:', event.candidate)
-            document.getElementById('answer-sdp').value = JSON.stringify(peerConnection.localDescription)
+            if (peerConnection.localDescription) {
+                document.getElementById('answer-sdp').value = JSON.stringify(peerConnection.localDescription)
+            } else {
+                console.log('Candidate failed')
+            }
         }
     };
 
     await peerConnection.setRemoteDescription(offer);
 
     let answer = await peerConnection.createAnswer();
+    console.log('Final Answer', answer)
     await peerConnection.setLocalDescription(answer); 
 }
 
